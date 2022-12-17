@@ -34,11 +34,10 @@ public class TransactionServiceImplementation implements TransactionService {
 
     @Override
     public ResponseTransactionDto generatedTransaction(RequestTransactionDto requestTransactionDto) {
-        Card card = cardsRepository.findCardByNumberCard(Integer.valueOf(requestTransactionDto.getCardNumber()));
+        Card card = cardsRepository.findCardByNumberCard(requestTransactionDto.getCardNumber());
 
         if (card.equals(null) || Integer.valueOf(card.getBalance()) < Integer.valueOf(requestTransactionDto.getValue()))
             throw new RuntimeException(Constants.EXCEPTION_TRANSACTION_ERROR);
-
         Transaction transaction = transactionRepository.save(Transaction.builder()
                 .uuid(UUID.randomUUID().toString())
                 .status(true)
@@ -46,11 +45,20 @@ public class TransactionServiceImplementation implements TransactionService {
                 .card(card)
                 .build());
 
+        card.setBalance(
+                String.valueOf(Integer.valueOf(card.getBalance()) - Integer.valueOf(requestTransactionDto.getValue()))
+        );
+        cardsRepository.save(card);
+
         return ResponseTransactionDto.builder()
                 .uuid(transaction.getUuid())
-                .status(transaction.getStatus().equals(true) ? "Realizado" : "Fallo")
+                .status(transaction.getStatus().equals(true) ? "Abierta" : "Fallo")
                 .value(transaction.getValue())
-                .client(transaction.getCard().getClient())
+                .name(
+                        card.getClient().getFirstName() + " " +
+                                card.getClient().getFirstSurname()
+                )
+                .documentNumber(String.valueOf(card.getClient().getDocumentNumber()))
                 .build();
     }
 }

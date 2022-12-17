@@ -22,5 +22,4 @@ public class RequestTransactionDto {
     @JsonProperty("numeroTarjeta")
     private String cardNumber;
 
-
 }

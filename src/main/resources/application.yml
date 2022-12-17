@@ -1,1 +1,22 @@
+#PUERTO DE CONEXION Y CONTEXTO DEL SERVICIO
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /banca-trinity
 
+#CONEXION BD
+spring:
+  application:
+    name: "servicio-banca"
+  datasource:
+    url: ${URL:jdbc:mysql://localhost:3306/banca}
+    username: ${USER_NAME:root}
+    password: ${USER_PASSWORD:1234}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update

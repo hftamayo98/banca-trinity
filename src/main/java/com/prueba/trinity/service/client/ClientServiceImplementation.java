@@ -1,4 +1,4 @@
-package com.prueba.trinity.service;
+package com.prueba.trinity.service.client;
 
 import com.prueba.trinity.dto.ClientDto;
 import com.prueba.trinity.models.Client;
@@ -6,7 +6,6 @@ import com.prueba.trinity.repository.ClientRepository;
 import com.prueba.trinity.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +38,7 @@ public class ClientServiceImplementation implements ClientService {
                 Client.builder()
                         .documentType(requestClient.getDocumentType())
                         .documentNumber(requestClient.getDocumentNumber())
+                        .status(true)
                         .firstName(requestClient.getFirstName())
                         .secondName(requestClient.getSecondName())
                         .firstSurname(requestClient.getFirstSurname())
@@ -57,6 +57,18 @@ public class ClientServiceImplementation implements ClientService {
         if (client.equals(null)) throw new RuntimeException(Constants.EXCEPTION_NOT_DATA_FOUND);
         clientRepository.save(updateData(client, requestClient));
         return requestClient;
+    }
+
+    @Override
+    public ClientDto getClient(Integer documentNumber) {
+        Client client = clientRepository.findByDocumentNumber(documentNumber);
+        if (client.equals(null)) throw new RuntimeException(Constants.EXCEPTION_NOT_DATA_FOUND);
+        return ClientDto.builder()
+                .documentType(client.getDocumentType())
+                .documentNumber(client.getDocumentNumber())
+                .firstName(client.getFirstName())
+                .firstSurname(client.getFirstSurname())
+                .build();
     }
 
     /**

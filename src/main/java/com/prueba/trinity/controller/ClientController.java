@@ -3,10 +3,9 @@ package com.prueba.trinity.controller;
 import com.prueba.trinity.dto.ClientDto;
 import com.prueba.trinity.models.Client;
 import com.prueba.trinity.response.Response;
-import com.prueba.trinity.service.ClientService;
+import com.prueba.trinity.service.client.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,15 +27,34 @@ public class ClientController {
                 .build();
     }
 
-
     @PostMapping("/create")
-    public ResponseEntity<?> createClient(@RequestBody ClientDto requestClient) {
-        return ResponseEntity.status(HttpStatus.CREATED.value()).body(clientService.createClient(requestClient));
+    public Response<Object> createClient(@RequestBody ClientDto requestClient) {
+        return Response.<Object>builder()
+                .failure(false)
+                .code(HttpStatus.OK.value())
+                .body(clientService.createClient(requestClient))
+                .timestamp(String.valueOf(System.currentTimeMillis()))
+                .build();
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateDataCliente(@RequestBody ClientDto requestClient) {
-        return ResponseEntity.status(HttpStatus.CREATED.value()).body(clientService.updateDataClient(requestClient));
+    public Response<ClientDto> updateDataCliente(@RequestBody ClientDto requestClient) {
+        return Response.<ClientDto>builder()
+                .failure(false)
+                .code(HttpStatus.OK.value())
+                .body(clientService.updateDataClient(requestClient))
+                .timestamp(String.valueOf(System.currentTimeMillis()))
+                .build();
+    }
+
+    @PostMapping("/find-client")
+    public Response<ClientDto> findClient(@RequestBody ClientDto requestClient) {
+        return Response.<ClientDto>builder()
+                .failure(false)
+                .code(HttpStatus.OK.value())
+                .body(clientService.getClient(requestClient.getDocumentNumber()))
+                .timestamp(String.valueOf(System.currentTimeMillis()))
+                .build();
     }
 
 }

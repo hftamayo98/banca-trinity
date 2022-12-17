@@ -38,6 +38,10 @@ public class Client {
     @JsonProperty("numeroDocumento")
     private Integer documentNumber;
 
+    @Column(name = "status")
+    @JsonProperty(namespace = "estado")
+    private Boolean status;
+
     /**
      * primer nombre del cliente
      */

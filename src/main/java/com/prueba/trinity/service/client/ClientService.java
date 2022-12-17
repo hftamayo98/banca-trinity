@@ -1,4 +1,4 @@
-package com.prueba.trinity.service;
+package com.prueba.trinity.service.client;
 
 import com.prueba.trinity.dto.ClientDto;
 import com.prueba.trinity.models.Client;
@@ -13,8 +13,9 @@ public interface ClientService {
 
     List<Client> getAllClients();
     Object createClient(ClientDto requestClient);
-
     ClientDto updateDataClient(ClientDto requestClient);
+
+    ClientDto getClient(Integer documentNumber);
 
 
 }
